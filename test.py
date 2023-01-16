@@ -11,7 +11,9 @@ from gestion import zona_admin, zona_cliente
 import menu
 
 
-cliente = Cliente(1, vehiculo=Vehiculo)
-vehiculo = Vehiculo("4545GZG", "turismo", cliente)
+vehiculo = Vehiculo("4545GZG", "turismo")
+cliente = Cliente(1, vehiculo)
+vehiculo.cliente = cliente
 
 print(cliente)
+print(cliente.vehiculo)

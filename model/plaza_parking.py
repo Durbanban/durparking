@@ -13,11 +13,11 @@ class PlazaParking:
         return self.__id;
 
     @property
-    def is_libre(self):
+    def libre(self):
         return self.__libre
 
-    @is_libre.setter
-    def is_libre(self, libre):
+    @libre.setter
+    def libre(self, libre):
         self.__libre = libre
 
     @property

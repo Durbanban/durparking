@@ -5,4 +5,8 @@ from model.abono import Abono
 from model.vehiculo import Vehiculo
 
 def mostrar_estado(parking: Parking):
-    return f"Existen {len(parking.plazas)} plazas en el parking"
+    resultado = []
+    for plaza in parking.plazas:
+        if plaza.libre:
+            resultado.append(plaza)
+    return f"Existen {len(parking.plazas)} plazas libres en el parking"

@@ -55,49 +55,42 @@ parking.plazas = lista
 # print(tomorrow.strftime("%A %d de %B de %Y a las %I:%M:%S"))
 
 
-
 menu.mostrar_menu_login()
 opcion_login = int(input())
 
-while(opcion_login != 0):
-    if(opcion_login == 0):
-        menu.mostrar_menu_login()
-        opcion_login = int(input())
-    if(opcion_login == 1):# ZONA CLIENTE
+while opcion_login != 0:
+    if opcion_login == 1: # ZONA CLIENTE
         menu.mostrar_menu_cliente()
         opcion_cliente = int(input())
-        while(opcion_cliente != 0):
-            if(opcion_cliente == 1):
+        while opcion_cliente != 0:
+            if opcion_cliente == 1:
                 break
-
-    elif(opcion_login == 2):
+        print("Volviendo a menú login...")
+    elif opcion_login == 2: # ZONA ADMIN
         menu.mostrar_menu_administrador()
         opcion_admin = int(input())
-        while(opcion_admin != 0):
-            if(opcion_admin == 1):
+        while opcion_admin != 0:
+            if opcion_admin == 1:
                 print(zona_admin.mostrar_estado(parking))
                 menu.mostrar_menu_administrador()
                 opcion_admin = int(input())
-            elif(opcion_admin == 2): # COMPROBAR FACTURACIÓN
-                opcion_login == 0
+            elif opcion_admin == 2: # COMPROBAR FACTURACIÓN
                 break
-            elif(opcion_admin == 3): # CONSULTAR ABONOS
+            elif opcion_admin == 3: # CONSULTAR ABONOS
                 break
-            elif(opcion_admin == 4): # DAR DE ALTA UN ABONO
+            elif opcion_admin == 4: # DAR DE ALTA UN ABONO
                 break
-            elif(opcion_admin == 5): # MODIFICAR UN ABONO
+            elif opcion_admin == 5: # MODIFICAR UN ABONO
                 break
-            elif(opcion_admin == 6): # DAR DE BAJA UN ABONO
+            elif opcion_admin == 6: # DAR DE BAJA UN ABONO
                 break
-            elif(opcion_admin == 7): # CADUCIDAD ABONOS MES
+            elif opcion_admin == 7: # CADUCIDAD ABONOS MES
                 break
-            elif(opcion_admin == 8): # CADUCIDAD ABONOS PRÓXIMOS 10 DÍAS
+            elif opcion_admin == 8: # CADUCIDAD ABONOS PRÓXIMOS 10 DÍAS
                 break
-            elif(opcion_admin == 0):
-                opcion_login == 0
-                break
-
-
+        print("Volviendo a menú login...")
+    menu.mostrar_menu_login()
+    opcion_login = int(input())
 
 
 print("¡Vuelva pronto!")

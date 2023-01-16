@@ -1,6 +1,6 @@
 class Vehiculo:
 
-    def __init__(self, matricula, tipo, cliente):
+    def __init__(self, matricula, tipo, cliente=None):
         self.__matricula = matricula
         self.__tipo = tipo
         self.__owner = cliente
