@@ -24,6 +24,14 @@ class Vehiculo:
         else:
             print("Introduce un tipo de vehículo válido (turismo, moto, movilidad)")
 
+    @property
+    def owner(self):
+        return self.__owner
+
+    @owner.setter
+    def owner(self, new_owner):
+        self.__owner = new_owner
+
     def __str__(self):
         return f"Matricula: {self.__matricula}\n" \
                f"Tipo: {self.__tipo}\n" \
