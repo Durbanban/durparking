@@ -1,6 +1,7 @@
 from random import randint
 
 class PlazaParking:
+    __libre = None
 
     def __init__(self, id, libre, tipo, tarifa):
         self.__id = id
@@ -12,13 +13,17 @@ class PlazaParking:
     def id(self):
         return self.__id;
 
+    @id.setter
+    def id(self, nuevo_id):
+        self.__id = nuevo_id
+
     @property
-    def libre(self):
+    def libre(self) -> bool:
         return self.__libre
 
     @libre.setter
-    def libre(self, libre):
-        self.__libre = libre
+    def libre(self, nuevo_libre: bool):
+        self.__libre = nuevo_libre
 
     @property
     def tipo(self):

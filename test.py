@@ -9,11 +9,13 @@ import pickle
 from io import open
 from gestion import zona_admin, zona_cliente
 import menu
+from servicios.parking_servicio import ParkingService
 
 
 vehiculo = Vehiculo("4545GZG", "turismo")
 cliente = Cliente(1, vehiculo)
 vehiculo.owner = cliente
+service = ParkingService()
 
 plaza_1 = PlazaParking(1, False, "turismo", 0.12)
 plaza_2 = PlazaParking(2, True, "movilidad", 0.10)
@@ -30,8 +32,25 @@ if plaza_1 == plaza_2:
 else:
     print("No son iguales")
 
+fw = open("recursos/pickle/test.pckl", "wb")
+pickle.dump(plazas, fw)
+fw.close()
+#
+# with open("recursos/pickle/test.pckl", "wb") as fw:
+#     pickle.dump(plaz)
+
+fr = open("recursos/pickle/test.pckl", "rb")
+plazas_test = pickle.load(fr)
+fr.close()
+
+for item in plazas_test:
+    print(item)
+
+
+
 
 print(cliente)
 print(cliente.vehiculo)
 
-print()
+variable = service.find_plaza_by_id(2)
+print(variable)

@@ -2,12 +2,12 @@ from datetime import datetime
 
 
 class Abono:
-    def __init__(self, tipo, fecha_activacion, fecha_cancelacion, cliente):
+    def __init__(self, tipo, fecha_activacion, fecha_cancelacion, abonado=None):
         self.__tipo = tipo
         self.__fecha_activacion = fecha_activacion
         self.__fecha_cancelacion = fecha_cancelacion
+        self.__abonado = abonado
         self.__caducidad = self.__fecha_cancelacion - self.__fecha_activacion
-        self.__cliente = cliente
 
     @property
     def tipo(self):
@@ -43,6 +43,14 @@ class Abono:
     def caducidad(self):
         return self.__caducidad
 
+    @property
+    def abonado(self):
+        return self.__abonado
+
+    @abonado.setter
+    def abonado(self, nuevo_abonado):
+        self.__cliente = nuevo_abonado
+
     def __eq__(self, other):
         if not isinstance(other, Abono):
             return NotImplemented
@@ -50,4 +58,4 @@ class Abono:
                and self.__fecha_activacion == other.fecha_activacion \
                and self.__fecha_cancelacion == other.fecha_cancelacion \
                and self.__caducidad == other.caducidad \
-               and self.__cliente == other.cliente
+               and self.__abonado == other.abonado

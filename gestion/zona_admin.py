@@ -6,9 +6,6 @@ from model.vehiculo import Vehiculo
 
 def mostrar_estado(parking: Parking):
     resultado = []
-    for plaza, index in enumerate(parking.plazas):
-        print(index)
-        if plaza == plaza:
-            print(plaza)
-        resultado.append(plaza)
+    for plaza in parking.plazas:
+        print(plaza)
     return f"Existen {len(resultado)} plazas libres en el parking"

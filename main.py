@@ -4,40 +4,44 @@ from model.parking import Parking
 from model.plaza_parking import PlazaParking
 from model.cliente import Cliente
 from model.vehiculo import Vehiculo
+from model.cliente_abonado import ClienteAbonado
+from model.abono import Abono
 from datetime import datetime, timedelta
 from locale import setlocale, LC_ALL
 import pickle
 from io import open
 from gestion import zona_admin, zona_cliente
 import menu
-
-# fichero_plazas = open("recursos/pickle/plazas.pckl", "wb")
-#
-# pickle.dump(parking.plazas, fichero_plazas)
-#
-# fichero_plazas.close()
-
-# for i in range(1, 41):
-#     if(i <= 28):
-#         plaza = PlazaParking(i, True, "turismo", 0.12)
-#         parking.addPlaza(plaza)
-#     elif(i <= 34):
-#         plaza = PlazaParking(i, True, "moto", 0.08)
-#         parking.addPlaza(plaza)
-#     else:
-#         plaza = PlazaParking(i, True, "movilidad", 0.10)
-#         parking.addPlaza(plaza)
+from servicios.parking_servicio import ParkingService
+service = ParkingService()
 
 setlocale(LC_ALL, 'es-ES')
 
-parking = Parking(plazas=[])
+
+plazas = service.cargar_parking()
+vehiculo = Vehiculo("5454HGF", "turismo")
+cliente = Cliente(1, vehiculo)
+abono = Abono("trimestral", datetime.now(), datetime.now() + timedelta(days=90))
+abonado = ClienteAbonado(1, vehiculo)
+abono.cliente = cliente
+vehiculo.owner = cliente
+abonado.dni = "45645645G"
+abonado.nombre= "Loquendo"
+abonado.tarjeta = "4444 4444 4444 4444"
+abonado.abono = abono
+
+print(vehiculo)
+print(abono)
+print(abonado)
+
+for plaza in plazas:
+    print(plaza.libre)
+
+pp = PlazaParking(41, True, "turismo", 0.12)
+print(pp.libre)
 
 
-lista = (pickle.load(open("recursos/pickle/plazas.pckl", "rb")))
 
-parking.plazas = lista
-
-# open("recursos/pickle/plazas.pckl", "rb").close()
 
 # print(calendar.month(2023, 1))
 #
