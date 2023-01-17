@@ -1,0 +1,2 @@
+ESTE ARCHIVO ESTÁ EN ESTÁ UBICACIÓN PARA QUE PERMANEZCA EL DIRECTORIO "pickle",
+ ya que he incluido los archivos .pckl en el .gitignore.
