@@ -2,8 +2,9 @@ from datetime import datetime
 
 
 class Abono:
-    def __init__(self, tipo, fecha_activacion, fecha_cancelacion, abonado=None):
+    def __init__(self, tipo, tarifa, fecha_activacion, fecha_cancelacion, abonado=None):
         self.__tipo = tipo
+        self.__tarifa = tarifa
         self.__fecha_activacion = fecha_activacion
         self.__fecha_cancelacion = fecha_cancelacion
         self.__abonado = abonado
@@ -19,6 +20,17 @@ class Abono:
             self.__tipo = nuevo_tipo
         else:
             print("Introduce un abono válido")
+
+    @property
+    def tarifa(self):
+        return self.__tarifa
+
+    @tarifa.setter
+    def tarifa(self, nueva_tarifa):
+        if nueva_tarifa > 0:
+            self.__tarifa = nueva_tarifa
+        else:
+            print("Introduce una tarifa válida (sólo números positivos)")
 
     @property
     def fecha_activacion(self):
@@ -49,7 +61,14 @@ class Abono:
 
     @abonado.setter
     def abonado(self, nuevo_abonado):
-        self.__cliente = nuevo_abonado
+        self.__abonado = nuevo_abonado
+
+    def __str__(self):
+        return f"Tipo de abono: {self.__tipo}\n" \
+               f"Tarifa: {self.__tarifa} €\n" \
+               f"Fecha de activación: {self.__fecha_activacion}\n" \
+               f"Fecha de cancelación: {self.__fecha_cancelacion}\nCaducidad: {self.__caducidad}\n" \
+               f"Abonado: {self.__abonado.id}"
 
     def __eq__(self, other):
         if not isinstance(other, Abono):

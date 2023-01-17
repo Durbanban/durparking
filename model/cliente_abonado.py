@@ -53,5 +53,5 @@ class ClienteAbonado(Cliente):
                f"Dni: {self.__dni}\n" \
                f"Nombre: {self.__nombre}\n" \
                f"Número de tarjeta: {self.__tarjeta}\n" \
-               f" Tipo de abono: {self.__abono.tipo}"
+               f"Tipo de abono: {self.__abono.tipo}"
 

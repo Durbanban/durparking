@@ -1,7 +1,6 @@
 from random import randint
 
 class PlazaParking:
-    __libre = None
 
     def __init__(self, id, libre, tipo, tarifa):
         self.__id = id
@@ -54,12 +53,11 @@ class PlazaParking:
         self.__pin == pin
 
 
+    def generar_abonado(self, abonado):
+        self.__abonado = abonado
 
-    def borrar_pin(self, pin=None):
-        if hasattr(self, pin):
-            delattr(self, pin)
-        else:
-            print("La plaza no tiene pin asociado")
+
+
 
 
 

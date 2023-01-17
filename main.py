@@ -13,32 +13,47 @@ from io import open
 from gestion import zona_admin, zona_cliente
 import menu
 from servicios.parking_servicio import ParkingService
+from repositorios.parking_repository import cargar_vehiculos, cargar_clientes
 service = ParkingService()
 
 setlocale(LC_ALL, 'es-ES')
 
 
-plazas = service.cargar_parking()
-vehiculo = Vehiculo("5454HGF", "turismo")
-cliente = Cliente(1, vehiculo)
-abono = Abono("trimestral", datetime.now(), datetime.now() + timedelta(days=90))
-abonado = ClienteAbonado(1, vehiculo)
-abono.cliente = cliente
-vehiculo.owner = cliente
-abonado.dni = "45645645G"
-abonado.nombre= "Loquendo"
-abonado.tarjeta = "4444 4444 4444 4444"
-abonado.abono = abono
+plazas, vehiculos, clientes, abonos, cobros = service.cargar_parking()
+# vehiculo = Vehiculo("5454HGF", "turismo")
+# cliente = Cliente(1, vehiculo)
+# abono = Abono("trimestral", datetime.now(), datetime.now() + timedelta(days=90))
+# abonado = ClienteAbonado(1, vehiculo)
+# abono.cliente = cliente
+# vehiculo.owner = cliente
+# abonado.dni = "45645645G"
+# abonado.nombre= "Loquendo"
+# abonado.tarjeta = "4444 4444 4444 4444"
+# abonado.abono = abono
 
-print(vehiculo)
-print(abono)
-print(abonado)
+# print(vehiculo)
+# print(abono)
+# print(abonado)
 
-for plaza in plazas:
-    print(plaza.libre)
+for abono in abonos:
+    print(abono)
 
-pp = PlazaParking(41, True, "turismo", 0.12)
-print(pp.libre)
+for cliente in clientes:
+    print(type(cliente))
+
+
+for vehiculo, cliente in zip(vehiculos, clientes):
+    print("VEHICULO")
+    print("===============")
+    print(vehiculo)
+    print("===============")
+    print("CLIENTE")
+    print("===============")
+    print(cliente)
+    print("===============")
+
+for cobro in cobros:
+    print(cobro)
 
 
 

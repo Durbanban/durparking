@@ -1,6 +1,6 @@
 class Cliente:
 
-    def __init__(self, id, vehiculo):
+    def __init__(self, id, vehiculo=None):
         self.__id = id
         self.__vehiculo = vehiculo
 

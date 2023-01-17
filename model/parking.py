@@ -1,6 +1,7 @@
 class Parking:
     plazas = []
-    def __init__(self, plazas = [], cobros = []):
+    def __init__(self, recaudacion, plazas = [], cobros = []):
+        self.__recaudacion = recaudacion
         self.__plazas = plazas
         self.__cobros = cobros
 
@@ -19,6 +20,15 @@ class Parking:
     @cobros.setter
     def cobros(self, cobros):
         self.__cobros = cobros
+
+    @property
+    def recaudacion(self):
+        return self.__recaudacion
+
+    @recaudacion.setter
+    def recaudacion(self, nueva_recaudacion):
+        if nueva_recaudacion > 0:
+            self.__recaudacion = nueva_recaudacion
 
     def addPlaza(self, plaza):
         self.__plazas.append(plaza)
