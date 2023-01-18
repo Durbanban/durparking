@@ -40,10 +40,25 @@ class ParkingService:
         clientes_abonados[2].tarjeta = "2254 8256 4287 8877"
         clientes_abonados[3].tarjeta = "63325 89987 1325 3214"
 
+        clientes_abonados[0].email = "hola_soy_pepito@gmail.com"
+        clientes_abonados[1].email = "miguel.campos@triana.salesianos.edu"
+        clientes_abonados[2].email = "backend_master@jpa.com"
+        clientes_abonados[3].email = "python.van.rossum@hotmail.com"
+
+
+
         for cliente, abono in zip(clientes_abonados, abonos):
             cliente.abono = abono
             abono.abonado = cliente
 
+        plazas[5].abonado = clientes_abonados[0]
+        plazas[5].generar_pin()
+        plazas[15].abonado = clientes_abonados[1]
+        plazas[15].generar_pin()
+        plazas[25].abonado = clientes_abonados[2]
+        plazas[25].generar_pin()
+        plazas[35].abonado = clientes_abonados[3]
+        plazas[35].generar_pin()
 
         for cliente, vehiculo in zip(clientes, vehiculos):
             cliente.vehiculo = vehiculo
@@ -64,12 +79,5 @@ class ParkingService:
         ocupaciones[4].plaza = plazas[38]
         ocupaciones[4].vehiculo = vehiculos[8]
 
-
-
-
-
         return plazas, vehiculos, clientes, abonos, cobros, ocupaciones
 
-
-    def find_plaza_by_id(self, id):
-        plazas = cargar_plazas()

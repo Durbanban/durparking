@@ -1,3 +1,5 @@
+import pickle
+
 from model.parking import Parking
 from model.plaza_parking import PlazaParking
 from model.cliente import Cliente
@@ -7,10 +9,25 @@ from model.ocupacion import Ocupacion
 from model.cobro import Cobro
 from datetime import datetime, timedelta
 
-def depositar_vehiculo(matricula, tipo, plazas, clientes, ocupaciones):
+def depositar_vehiculo(matricula, opcion_tipo, plazas, clientes, ocupaciones, vehiculos):
+
+    if opcion_tipo in [1, 2, 3]:
+        if opcion_tipo == 1:
+            tipo = "turismo"
+        elif opcion_tipo == 2:
+            tipo = "moto"
+        elif opcion_tipo == 3:
+            tipo = "movilidad"
+
     vehiculo = Vehiculo(matricula, tipo)
     cliente = Cliente(len(clientes) + 1, vehiculo)
     vehiculo.owner = cliente
+    clientes.append(cliente)
+    vehiculos.append(vehiculo)
+    with open("recursos/pickle/clientes.pckl", "wb") as fw:
+        pickle.dump(clientes, fw)
+    with open("recursos/pickle/vehiculos.pckl", "wb") as fw:
+        pickle.dump(vehiculos, fw)
 
     flag = False
 
@@ -22,27 +39,64 @@ def depositar_vehiculo(matricula, tipo, plazas, clientes, ocupaciones):
             plaza.libre = False
             flag = True
 
+    with open("recursos/pickle/ocupaciones.pckl", "wb") as fw:
+        pickle.dump(ocupaciones, fw)
 
-    return ocupacion
+    with open("recursos/pickle/plazas.pckl", "wb") as fw:
+        pickle.dump(plazas, fw)
+
+    return ocupacion, plazas, ocupaciones
+
 
 def retirar_vehiculo(matricula, plaza_cliente, pin, plazas, cobros, ocupaciones):
 
-    flag_2 = False
+    flag = False
 
     for ocupacion in ocupaciones:
-        if ocupacion.plaza.id == plaza_cliente.id and not plaza_cliente.libre:
+        if ocupacion.plaza.id == plaza_cliente.id\
+                and not plaza_cliente.libre\
+                and plaza_cliente.pin == pin and ocupacion.vehiculo.matricula == matricula:
             o = ocupacion
-            flag_2 = True
+            flag = True
 
     intervalo = datetime.now() - o.fecha_deposito
     importe = round(plaza_cliente.tarifa * (intervalo.total_seconds() / 60), 2)
     cobro = Cobro(importe, datetime.now())
     cobros.append(cobro)
+    with open("recursos/pickle/cobros.pckl", "wb") as fw:
+        pickle.dump(cobros, fw)
 
     plaza_cliente.libre = True
     plaza_cliente.pin = ''
 
-    return cobro
+    with open("recursos/pickle/plazas.pckl", "wb") as fw:
+        pickle.dump(plazas, fw)
+
+    return cobro, cobros, plazas
+
+def depositar_vehiculo_abonado(abonado, plazas, ocupaciones):
+
+    for plaza in plazas:
+        if plaza.abonado is not None:
+            if plaza.abonado.id == abonado.id:
+                ocupacion = Ocupacion(datetime.now(), plaza, abonado.vehiculo)
+                plaza.libre = False
+
+    ocupaciones.append(ocupacion)
+
+
+    with open("recursos/pickle/ocupaciones.pckl", "wb") as fw:
+        pickle.dump(ocupaciones, fw)
+
+    with open("recursos/pickle/plazas.pckl", "wb") as fw:
+        pickle.dump(plazas, fw)
+
+    return ocupacion, plazas, ocupaciones
+
+
+
+
+
 
 
 

@@ -2,12 +2,13 @@ from random import randint
 
 class PlazaParking:
 
-    def __init__(self, id, libre, tipo, tarifa):
+    def __init__(self, id, libre, tipo, tarifa, abonado=None):
         self.__id = id
         self.__libre = libre
         self.__tipo = tipo
         self.__tarifa = tarifa
         self.__pin = ''
+        self.__abonado = abonado
 
     @property
     def id(self):
@@ -55,6 +56,14 @@ class PlazaParking:
     def pin(self, nuevo_pin):
         self.__pin = nuevo_pin
 
+    @property
+    def abonado(self):
+        return self.__abonado
+
+    @abonado.setter
+    def abonado(self, nuevo_abonado):
+        self.__abonado = nuevo_abonado
+
     def generar_pin(self):
         pin = ''
         for cifra in range(0, 6):
@@ -71,10 +80,19 @@ class PlazaParking:
 
 
     def __str__(self):
-        return f"Id: {self.__id}\n" \
-               f"Libre: {self.__libre}\n" \
-               f"Tipo: {self.__tipo}\n" \
-               f"Tarifa: {self.__tarifa} cent por minuto"
+        if self.__abonado is not None:
+            return f"Id: {self.__id}\n" \
+                   f"Libre: {self.__libre}\n" \
+                   f"Tipo: {self.__tipo}\n" \
+                   f"Tarifa: {self.__tarifa} cent por minuto\n" \
+                   f"PIN: {self.__pin}\n" \
+                   f"Abonado: {self.__abonado.nombre}"
+        elif self.__abonado is None:
+            return f"Id: {self.__id}\n" \
+                   f"Libre: {self.__libre}\n" \
+                   f"Tipo: {self.__tipo}\n" \
+                   f"Tarifa: {self.__tarifa} cent por minuto\n" \
+                   f"PIN: {self.__pin}"
 
     def __eq__ (self, other):
         if not isinstance(other, PlazaParking):

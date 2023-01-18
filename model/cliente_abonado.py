@@ -6,6 +6,7 @@ class ClienteAbonado(Cliente):
     __dni = ''
     __nombre = ''
     __tarjeta = ''
+    __email = ''
     __abono = None
 
     @property
@@ -38,6 +39,14 @@ class ClienteAbonado(Cliente):
             self.__tarjeta = nueva_tarjeta
         else:
             print("Introduce un número de tarjeta válido (16 caracteres)")
+
+    @property
+    def email(self):
+        return self.__email
+
+    @email.setter
+    def email(self, nuevo_email):
+        self.__email = nuevo_email
 
     @property
     def abono(self):

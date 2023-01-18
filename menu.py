@@ -7,7 +7,7 @@ def mostrar_menu_cliente():
     print("Pulse 1 para depositar vehículo")
     print("Pulse 2 para retirar vehículo")
     print("Pulse 3 para depositar vehículo (SÓLO ABONADOS)")
-    print("Pulse 4 para retirar vehículo (SÓLO ABONADOS")
+    print("Pulse 4 para retirar vehículo (SÓLO ABONADOS)")
     print("pulse 0 para salir")
 
 def mostrar_menu_administrador():
@@ -20,4 +20,5 @@ def mostrar_menu_administrador():
     print("Pulse 7 para comprobar caducidad de abonos en un mes")
     print("Pulse 8 para consultar la caducidad de abonos en los próximos 10 días")
     print("Pulse 0 para volver")
+
 
