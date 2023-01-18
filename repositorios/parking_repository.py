@@ -7,7 +7,9 @@ from model.vehiculo import Vehiculo
 from model.cliente_abonado import ClienteAbonado
 from model.abono import Abono
 from model.cobro import Cobro
+from model.ocupacion import Ocupacion
 from datetime import date, datetime, timedelta
+
 from dateutil.relativedelta import relativedelta
 import pickle
 from random import uniform, randrange
@@ -138,6 +140,28 @@ def cargar_cobros():
             pickle.dump(lista_cobros, fw)
 
     return lista_cobros
+
+def cargar_ocupaciones():
+
+    lista_ocupaciones = []
+
+    if os.path.isfile("recursos/pickle/ocupaciones.pckl"):
+        with open("recursos/pickle/ocupaciones.pckl", "rb") as fr:
+            lista_ocupaciones = pickle.load(fr)
+
+    else:
+        ocupacion_1 = Ocupacion(generar_fecha_aleatoria(datetime(2019, 1, 1, 8, 0, 0), datetime.now()))
+        ocupacion_2 = Ocupacion(generar_fecha_aleatoria(datetime(2019, 1, 1, 8, 0, 0), datetime.now()))
+        ocupacion_3 = Ocupacion(generar_fecha_aleatoria(datetime(2019, 1, 1, 8, 0, 0), datetime.now()))
+        ocupacion_4 = Ocupacion(generar_fecha_aleatoria(datetime(2019, 1, 1, 8, 0, 0), datetime.now()))
+        ocupacion_5 = Ocupacion(generar_fecha_aleatoria(datetime(2019, 1, 1, 8, 0, 0), datetime.now()))
+
+        lista_ocupaciones = [ocupacion_1, ocupacion_2, ocupacion_3, ocupacion_4, ocupacion_5]
+
+        with open("recursos/pickle/ocupaciones.pckl", "wb") as fw:
+            pickle.dump(lista_ocupaciones, fw)
+
+    return lista_ocupaciones
 
 def generar_fecha_aleatoria(inicio, fin):
     delta = fin - inicio

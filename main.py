@@ -11,15 +11,16 @@ from locale import setlocale, LC_ALL
 import pickle
 from io import open
 from gestion import zona_admin, zona_cliente
-import menu
+from menu import mostrar_menu_cliente, mostrar_menu_administrador, mostrar_menu_login
 from servicios.parking_servicio import ParkingService
 from repositorios.parking_repository import cargar_vehiculos, cargar_clientes
 service = ParkingService()
+from gestion.zona_cliente import depositar_vehiculo, retirar_vehiculo
 
 setlocale(LC_ALL, 'es-ES')
 
 
-plazas, vehiculos, clientes, abonos, cobros = service.cargar_parking()
+plazas, vehiculos, clientes, abonos, cobros, ocupaciones = service.cargar_parking()
 # vehiculo = Vehiculo("5454HGF", "turismo")
 # cliente = Cliente(1, vehiculo)
 # abono = Abono("trimestral", datetime.now(), datetime.now() + timedelta(days=90))
@@ -55,6 +56,13 @@ for vehiculo, cliente in zip(vehiculos, clientes):
 for cobro in cobros:
     print(cobro)
 
+for ocupacion in ocupaciones:
+    print(ocupacion)
+
+
+
+
+
 
 
 
@@ -74,24 +82,38 @@ for cobro in cobros:
 # print(tomorrow.strftime("%A %d de %B de %Y a las %I:%M:%S"))
 
 
-menu.mostrar_menu_login()
+mostrar_menu_login()
 opcion_login = int(input())
 
 while opcion_login != 0:
     if opcion_login == 1: # ZONA CLIENTE
-        menu.mostrar_menu_cliente()
+        mostrar_menu_cliente()
         opcion_cliente = int(input())
         while opcion_cliente != 0:
             if opcion_cliente == 1:
-                break
+                matricula_deposito = input("Introduzca la matrícula de su vehículo: ")
+                tipo = input("Introduzca el tipo del vehículo: ")
+                ticket = depositar_vehiculo(matricula_deposito, tipo, plazas, clientes, ocupaciones)
+                print(ticket)
+            if opcion_cliente == 2:
+                matricula_retirada = input("Introduzca la matrícula de su vehículo: ")
+                identificador = int(input("Introduzca el identificador de la plaza donde está estacionado su vehículo: "))
+                plaza = plazas[identificador -1]
+                pin = input("Introduzca el pin asociado a dicha plaza: ")
+                cobro = retirar_vehiculo(matricula_retirada, plaza, pin, plazas, cobros, ocupaciones)
+                print(f"El importe es: {cobro.cantidad}")
+
+            mostrar_menu_cliente()
+            opcion_cliente = int(input())
+
         print("Volviendo a menú login...")
     elif opcion_login == 2: # ZONA ADMIN
-        menu.mostrar_menu_administrador()
+        mostrar_menu_administrador()
         opcion_admin = int(input())
         while opcion_admin != 0:
             if opcion_admin == 1:
                 print(zona_admin.mostrar_estado(parking))
-                menu.mostrar_menu_administrador()
+                mostrar_menu_administrador()
                 opcion_admin = int(input())
             elif opcion_admin == 2: # COMPROBAR FACTURACIÓN
                 break
@@ -108,7 +130,7 @@ while opcion_login != 0:
             elif opcion_admin == 8: # CADUCIDAD ABONOS PRÓXIMOS 10 DÍAS
                 break
         print("Volviendo a menú login...")
-    menu.mostrar_menu_login()
+    mostrar_menu_login()
     opcion_login = int(input())
 
 

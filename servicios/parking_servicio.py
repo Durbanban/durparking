@@ -1,13 +1,13 @@
 from model.parking import Parking
 from model.plaza_parking import PlazaParking
 from model.cliente_abonado import ClienteAbonado
+from datetime import datetime
 from repositorios.parking_repository import cargar_plazas, \
     cargar_vehiculos,\
     cargar_clientes,\
     cargar_abonos,\
-    cargar_cobros
-
-
+    cargar_cobros,\
+    cargar_ocupaciones
 
 class ParkingService:
 
@@ -17,6 +17,7 @@ class ParkingService:
         clientes = cargar_clientes()
         abonos = cargar_abonos()
         cobros = cargar_cobros()
+        ocupaciones = cargar_ocupaciones()
 
         clientes_abonados = []
 
@@ -48,12 +49,27 @@ class ParkingService:
             cliente.vehiculo = vehiculo
             vehiculo.owner = cliente
 
+        ocupaciones[0].plaza = plazas[5]
+        ocupaciones[0].vehiculo = vehiculos[1]
+
+        ocupaciones[1].plaza = plazas[8]
+        ocupaciones[1].vehiculo = vehiculos[2]
+
+        ocupaciones[2].plaza = plazas[3]
+        ocupaciones[2].vehiculo = vehiculos[6]
+
+        ocupaciones[3].plaza = plazas[31]
+        ocupaciones[3].vehiculo = vehiculos[6]
+
+        ocupaciones[4].plaza = plazas[38]
+        ocupaciones[4].vehiculo = vehiculos[8]
 
 
 
 
-        return plazas, vehiculos, clientes, abonos, cobros
+
+        return plazas, vehiculos, clientes, abonos, cobros, ocupaciones
 
 
     def find_plaza_by_id(self, id):
-        return id
+        plazas = cargar_plazas()

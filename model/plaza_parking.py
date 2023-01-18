@@ -7,6 +7,7 @@ class PlazaParking:
         self.__libre = libre
         self.__tipo = tipo
         self.__tarifa = tarifa
+        self.__pin = ''
 
     @property
     def id(self):
@@ -46,11 +47,19 @@ class PlazaParking:
         else:
             print("Introduce una tarifa válida (sólo números positivos")
 
+    @property
+    def pin(self):
+        return self.__pin
+
+    @pin.setter
+    def pin(self, nuevo_pin):
+        self.__pin = nuevo_pin
+
     def generar_pin(self):
         pin = ''
         for cifra in range(0, 6):
             pin += str(randint(0, 9))
-        self.__pin == pin
+        self.__pin = pin
 
 
     def generar_abonado(self, abonado):
