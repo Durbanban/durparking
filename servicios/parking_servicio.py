@@ -1,7 +1,8 @@
 from model.parking import Parking
 from model.plaza_parking import PlazaParking
 from model.cliente_abonado import ClienteAbonado
-from datetime import datetime
+from model.cobro_abonado import CobroAbonado
+from datetime import datetime, timedelta
 from repositorios.parking_repository import cargar_plazas, \
     cargar_vehiculos,\
     cargar_clientes,\
@@ -20,6 +21,7 @@ class ParkingService:
         ocupaciones = cargar_ocupaciones()
 
         clientes_abonados = []
+        cobros_abonados = []
 
         for cliente in clientes:
             if isinstance(cliente, ClienteAbonado):
@@ -50,6 +52,29 @@ class ParkingService:
         for cliente, abono in zip(clientes_abonados, abonos):
             cliente.abono = abono
             abono.abonado = cliente
+
+        for cobro in cobros:
+            if isinstance(cobro, CobroAbonado):
+                cobros_abonados.append(cobro)
+
+        for abonado, cobro in zip(clientes_abonados, cobros_abonados):
+            cobro.abonado = abonado
+
+
+        # cobro_1 = CobroAbonado(25.0, datetime.now() - timedelta(days=24))
+        # cobro_1.abonado = clientes_abonados[0]
+        # cobros.append(cobro_1)
+        # cobro_2 = CobroAbonado(70.0, datetime.now())
+        # cobro_2.abonado = clientes_abonados[1]
+        # cobros.append(cobro_2)
+        # cobro_3 = CobroAbonado(130.0, datetime.now())
+        # cobro_3.abonado = clientes_abonados[2]
+        # cobros.append(cobro_3)
+        # cobro_4 = CobroAbonado(200.0, datetime.now())
+        # cobro_4.abonado = clientes_abonados[3]
+        # cobros.append(cobro_4)
+
+
 
         plazas[30].abonado = clientes_abonados[0]
         plazas[30].generar_pin()

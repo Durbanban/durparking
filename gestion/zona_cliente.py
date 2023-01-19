@@ -22,8 +22,7 @@ def depositar_vehiculo(matricula, opcion_tipo, plazas, clientes, ocupaciones, ve
     vehiculo = Vehiculo(matricula, tipo)
     cliente = Cliente(len(clientes) + 1, vehiculo)
     vehiculo.owner = cliente
-    clientes.append(cliente)
-    vehiculos.append(vehiculo)
+
     with open("recursos/pickle/clientes.pckl", "wb") as fw:
         pickle.dump(clientes, fw)
     with open("recursos/pickle/vehiculos.pckl", "wb") as fw:
@@ -38,14 +37,19 @@ def depositar_vehiculo(matricula, opcion_tipo, plazas, clientes, ocupaciones, ve
             ocupaciones.append(ocupacion)
             plaza.libre = False
             flag = True
+    if flag:
 
-    with open("recursos/pickle/ocupaciones.pckl", "wb") as fw:
-        pickle.dump(ocupaciones, fw)
+        clientes.append(cliente)
+        vehiculos.append(vehiculo)
 
-    with open("recursos/pickle/plazas.pckl", "wb") as fw:
-        pickle.dump(plazas, fw)
+        with open("recursos/pickle/ocupaciones.pckl", "wb") as fw:
+            pickle.dump(ocupaciones, fw)
 
-    return ocupacion, plazas, ocupaciones, clientes, vehiculos
+        with open("recursos/pickle/plazas.pckl", "wb") as fw:
+            pickle.dump(plazas, fw)
+
+
+        return ocupacion
 
 
 def retirar_vehiculo(matricula, plaza_cliente, pin, plazas, cobros, ocupaciones):
@@ -73,7 +77,7 @@ def retirar_vehiculo(matricula, plaza_cliente, pin, plazas, cobros, ocupaciones)
     with open("recursos/pickle/plazas.pckl", "wb") as fw:
         pickle.dump(plazas, fw)
 
-    return cobro, cobros, plazas
+    return cobro
 
 def depositar_vehiculo_abonado(abonado, plazas, ocupaciones):
 
@@ -92,7 +96,7 @@ def depositar_vehiculo_abonado(abonado, plazas, ocupaciones):
     with open("recursos/pickle/plazas.pckl", "wb") as fw:
         pickle.dump(plazas, fw)
 
-    return ocupacion, plazas, ocupaciones
+    return ocupacion
 
 def retirar_vehiculo_abonado(matricula, plaza_abonado, pin, plazas, ocupaciones):
 
@@ -110,20 +114,4 @@ def retirar_vehiculo_abonado(matricula, plaza_abonado, pin, plazas, ocupaciones)
 
     with open("recursos/pickle/plazas.pckl", "wb") as fw:
         pickle.dump(plazas, fw)
-
-    return plazas
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

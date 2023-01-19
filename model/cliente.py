@@ -8,6 +8,10 @@ class Cliente:
     def id(self):
         return self.__id
 
+    @id.setter
+    def id(self, nuevo_id):
+        self.__id = nuevo_id
+
     @property
     def vehiculo(self):
         return self.__vehiculo

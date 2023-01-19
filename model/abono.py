@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 
 
 class Abono:
@@ -8,7 +8,7 @@ class Abono:
         self.__fecha_activacion = fecha_activacion
         self.__fecha_cancelacion = fecha_cancelacion
         self.__abonado = abonado
-        self.__caducidad = self.__fecha_cancelacion - self.__fecha_activacion
+        self.__caducidad = self.__fecha_cancelacion - date.today()
 
     @property
     def tipo(self):
@@ -16,10 +16,8 @@ class Abono:
 
     @tipo.setter
     def tipo(self, nuevo_tipo):
-        if (nuevo_tipo in ["mensual", "trimestral", "semestral", "anual"]):
-            self.__tipo = nuevo_tipo
-        else:
-            print("Introduce un abono válido")
+        self.__tipo = nuevo_tipo
+
 
     @property
     def tarifa(self):
@@ -27,10 +25,7 @@ class Abono:
 
     @tarifa.setter
     def tarifa(self, nueva_tarifa):
-        if nueva_tarifa > 0:
-            self.__tarifa = nueva_tarifa
-        else:
-            print("Introduce una tarifa válida (sólo números positivos)")
+        self.__tarifa = nueva_tarifa
 
     @property
     def fecha_activacion(self):
@@ -46,10 +41,8 @@ class Abono:
 
     @fecha_cancelacion.setter
     def fecha_cancelacion(self, nueva_fecha):
-        if (nueva_fecha > datetime.now()):
-            self.__fecha_cancelacion = nueva_fecha
-        else:
-            print("Introduce una fecha válida")
+        self.__fecha_cancelacion = nueva_fecha
+
 
     @property
     def caducidad(self):
@@ -68,7 +61,7 @@ class Abono:
                f"Tarifa: {self.__tarifa} €\n" \
                f"Fecha de activación: {self.__fecha_activacion}\n" \
                f"Fecha de cancelación: {self.__fecha_cancelacion}\nCaducidad: {self.__caducidad}\n" \
-               f"Abonado: {self.__abonado.id}"
+               f"Abonado: {self.__abonado.nombre}"
 
     def __eq__(self, other):
         if not isinstance(other, Abono):

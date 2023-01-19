@@ -33,10 +33,7 @@ class Ocupacion:
 
     @fecha_deposito.setter
     def fecha_deposito(self, nueva_fecha_deposito):
-        if nueva_fecha_deposito > datetime.now():
-            self.__fecha_deposito = nueva_fecha_deposito
-        else:
-            print("Introduzca una fecha válida")
+        self.__fecha_deposito = nueva_fecha_deposito
 
     def __str__(self):
         return f"******************************************************\nMatrícula: {self.__vehiculo.matricula}\n" \

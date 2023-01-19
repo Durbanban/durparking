@@ -19,10 +19,7 @@ class Vehiculo:
 
     @tipo.setter
     def tipo(self, nuevo_tipo):
-        if(nuevo_tipo in ["turismo", "moto", "movilidad"]):
-            self.__tipo = nuevo_tipo
-        else:
-            print("Introduce un tipo de vehículo válido (turismo, moto, movilidad)")
+        self.__tipo = nuevo_tipo
 
     @property
     def owner(self):

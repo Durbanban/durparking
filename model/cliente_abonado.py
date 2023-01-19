@@ -15,10 +15,8 @@ class ClienteAbonado(Cliente):
 
     @dni.setter
     def dni(self, nuevo_dni):
-        if len(nuevo_dni) == 9:
-            self.__dni = nuevo_dni
-        else:
-            print("Introduce un dni válido (9 caracteres)")
+        self.__dni = nuevo_dni
+
 
     @property
     def nombre(self):
@@ -26,8 +24,7 @@ class ClienteAbonado(Cliente):
 
     @nombre.setter
     def nombre(self, nuevo_nombre):
-        if(type(nuevo_nombre) == str):
-            self.__nombre = nuevo_nombre
+        self.__nombre = nuevo_nombre
 
     @property
     def tarjeta(self):
@@ -35,10 +32,7 @@ class ClienteAbonado(Cliente):
 
     @tarjeta.setter
     def tarjeta(self, nueva_tarjeta):
-        if type(nueva_tarjeta == str and len(nueva_tarjeta) == 16):
-            self.__tarjeta = nueva_tarjeta
-        else:
-            print("Introduce un número de tarjeta válido (16 caracteres)")
+        self.__tarjeta = nueva_tarjeta
 
     @property
     def email(self):

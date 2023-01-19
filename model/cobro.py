@@ -14,10 +14,7 @@ class Cobro:
 
     @cantidad.setter
     def cantidad(self, nueva_cantidad):
-        if nueva_cantidad > 0:
-            self.__cantidad = nueva_cantidad
-        else:
-            print("La cantidad debe ser positiva")
+        self.__cantidad = nueva_cantidad
 
     @property
     def fecha(self):

@@ -27,8 +27,7 @@ class Parking:
 
     @recaudacion.setter
     def recaudacion(self, nueva_recaudacion):
-        if nueva_recaudacion > 0:
-            self.__recaudacion = nueva_recaudacion
+        self.__recaudacion = nueva_recaudacion
 
     def addPlaza(self, plaza):
         self.__plazas.append(plaza)

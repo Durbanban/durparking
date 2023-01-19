@@ -12,45 +12,23 @@ import menu
 from servicios.parking_servicio import ParkingService
 
 
-vehiculo = Vehiculo("4545GZG", "turismo")
-cliente = Cliente(1, vehiculo)
-vehiculo.owner = cliente
-service = ParkingService()
+with open("recursos/pickle/clientes.pckl", "rb") as fr:
+    clientes = pickle.load(fr)
 
-plaza_1 = PlazaParking(1, False, "turismo", 0.12)
-plaza_2 = PlazaParking(2, True, "movilidad", 0.10)
-plazas = [plaza_1, plaza_2]
-parking = Parking(plazas)
+with open("recursos/pickle/vehiculos.pckl", "rb") as fr:
+    vehiculos = pickle.load(fr)
 
-for plaza in parking.plazas:
-    if plaza.libre:
-        print(plaza)
-    else:
-        print("Plaza no libre")
-if plaza_1 == plaza_2:
-    print("Son iguales")
-else:
-    print("No son iguales")
+with open("recursos/pickle/abonos.pckl", "rb") as fr:
+    abonos = pickle.load(fr)
 
-fw = open("recursos/pickle/test.pckl", "wb")
-pickle.dump(plazas, fw)
-fw.close()
-#
-# with open("recursos/pickle/test.pckl", "wb") as fw:
-#     pickle.dump(plaz)
+with open("recursos/pickle/plazas.pckl", "rb") as fr:
+    plazas = pickle.load(fr)
 
-fr = open("recursos/pickle/test.pckl", "rb")
-plazas_test = pickle.load(fr)
-fr.close()
+with open("recursos/pickle/cobros.pckl", "rb") as fr:
+    cobros = pickle.load(fr)
 
-for item in plazas_test:
+with open("recursos/pickle/ocupaciones.pckl", "rb") as fr:
+    ocupaciones = pickle.load(fr)
+
+for item in plazas:
     print(item)
-
-
-
-
-print(cliente)
-print(cliente.vehiculo)
-
-variable = service.find_plaza_by_id(2)
-print(variable)

@@ -32,10 +32,7 @@ class PlazaParking:
 
     @tipo.setter
     def tipo(self, nuevo_tipo):
-        if (nuevo_tipo in ["turismo", "moto", "movilidad"]):
-            self.__tipo = nuevo_tipo
-        else:
-            print("Introduce un tipo válido (turismo, moto, movilidad")
+        self.__tipo = nuevo_tipo
 
     @property
     def tarifa(self):
@@ -43,10 +40,7 @@ class PlazaParking:
 
     @tarifa.setter
     def tarifa(self, nueva_tarifa):
-        if (nueva_tarifa >= 0):
-            self.tarifa = nueva_tarifa
-        else:
-            print("Introduce una tarifa válida (sólo números positivos")
+        self.tarifa = nueva_tarifa
 
     @property
     def pin(self):
@@ -70,12 +64,8 @@ class PlazaParking:
             pin += str(randint(0, 9))
         self.__pin = pin
 
-
-    def generar_abonado(self, abonado):
-        self.__abonado = abonado
-
-
-
+    def borrar_abonado(self):
+        self.__abonado = None
 
 
 

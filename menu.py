@@ -15,10 +15,11 @@ def mostrar_menu_administrador():
     print("Pulse 2 para comprobar facturación")
     print("Pulse 3 para consultar los abonos")
     print("Pulse 4 para dar de alta un abono")
-    print("Pulse 5 para modificar un abono")
-    print("Pulse 6 para dar de baja un abono")
-    print("Pulse 7 para comprobar caducidad de abonos en un mes")
-    print("Pulse 8 para consultar la caducidad de abonos en los próximos 10 días")
+    print("Pulse 5 para renovar un abono")
+    print("Pulse 6 para modificar datos personales de abonado")
+    print("Pulse 7 para dar de baja un abono")
+    print("Pulse 8 para comprobar caducidad de abonos en un mes")
+    print("Pulse 9 para consultar la caducidad de abonos en los próximos 10 días")
     print("Pulse 0 para volver")
 
 

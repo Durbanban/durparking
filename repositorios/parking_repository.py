@@ -7,6 +7,7 @@ from model.vehiculo import Vehiculo
 from model.cliente_abonado import ClienteAbonado
 from model.abono import Abono
 from model.cobro import Cobro
+from model.cobro_abonado import CobroAbonado
 from model.ocupacion import Ocupacion
 from datetime import date, datetime, timedelta
 
@@ -110,10 +111,10 @@ def cargar_abonos():
             lista_abonos = pickle.load(fr)
 
     else:
-        abono_1 = Abono("mensual", 25, date.today(), (date.today() + relativedelta(months=1)))
-        abono_2 = Abono("trimestral", 70, date.today(), (date.today() + relativedelta(months=3)))
-        abono_3 = Abono("semestral", 130, date.today(), (date.today() + relativedelta(months=6)))
-        abono_4 = Abono("anual", 200, date.today(), (date.today() + relativedelta(months=12)))
+        abono_1 = Abono("mensual", 25.0, date.today() - timedelta(days=24), ((date.today() - timedelta(days=24)) + relativedelta(months=1)))
+        abono_2 = Abono("trimestral", 70.0, date.today(), (date.today() + relativedelta(months=3)))
+        abono_3 = Abono("semestral", 130.0, date.today(), (date.today() + relativedelta(months=6)))
+        abono_4 = Abono("anual", 200.0, date.today(), (date.today() + relativedelta(months=12)))
 
         lista_abonos=[abono_1, abono_2, abono_3, abono_4]
 
@@ -135,6 +136,15 @@ def cargar_cobros():
             cobro = Cobro(round(uniform(3.50, 25.60), 2),
             generar_fecha_aleatoria(datetime(2019, 1, 1, 8, 0, 0), datetime.now()))
             lista_cobros.append(cobro)
+
+        cobro_1 = CobroAbonado(25.0, datetime.now() - timedelta(days=24))
+        lista_cobros.append(cobro_1)
+        cobro_2 = CobroAbonado(70.0, datetime.now())
+        lista_cobros.append(cobro_2)
+        cobro_3 = CobroAbonado(130.0, datetime.now())
+        lista_cobros.append(cobro_3)
+        cobro_4 = CobroAbonado(200.0, datetime.now())
+        lista_cobros.append(cobro_4)
 
         with open("recursos/pickle/cobros.pckl", "wb") as fw:
             pickle.dump(lista_cobros, fw)
