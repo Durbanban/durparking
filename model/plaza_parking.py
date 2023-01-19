@@ -84,14 +84,14 @@ class PlazaParking:
             return f"Id: {self.__id}\n" \
                    f"Libre: {self.__libre}\n" \
                    f"Tipo: {self.__tipo}\n" \
-                   f"Tarifa: {self.__tarifa} cent por minuto\n" \
+                   f"Tarifa: {self.__tarifa} € por minuto\n" \
                    f"PIN: {self.__pin}\n" \
                    f"Abonado: {self.__abonado.nombre}"
         elif self.__abonado is None:
             return f"Id: {self.__id}\n" \
                    f"Libre: {self.__libre}\n" \
                    f"Tipo: {self.__tipo}\n" \
-                   f"Tarifa: {self.__tarifa} cent por minuto\n" \
+                   f"Tarifa: {self.__tarifa} € por minuto\n" \
                    f"PIN: {self.__pin}"
 
     def __eq__ (self, other):

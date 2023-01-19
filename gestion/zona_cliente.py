@@ -45,7 +45,7 @@ def depositar_vehiculo(matricula, opcion_tipo, plazas, clientes, ocupaciones, ve
     with open("recursos/pickle/plazas.pckl", "wb") as fw:
         pickle.dump(plazas, fw)
 
-    return ocupacion, plazas, ocupaciones
+    return ocupacion, plazas, ocupaciones, clientes, vehiculos
 
 
 def retirar_vehiculo(matricula, plaza_cliente, pin, plazas, cobros, ocupaciones):
@@ -55,7 +55,8 @@ def retirar_vehiculo(matricula, plaza_cliente, pin, plazas, cobros, ocupaciones)
     for ocupacion in ocupaciones:
         if ocupacion.plaza.id == plaza_cliente.id\
                 and not plaza_cliente.libre\
-                and plaza_cliente.pin == pin and ocupacion.vehiculo.matricula == matricula:
+                and plaza_cliente.pin == pin\
+                and ocupacion.vehiculo.matricula == matricula:
             o = ocupacion
             flag = True
 
@@ -92,6 +93,30 @@ def depositar_vehiculo_abonado(abonado, plazas, ocupaciones):
         pickle.dump(plazas, fw)
 
     return ocupacion, plazas, ocupaciones
+
+def retirar_vehiculo_abonado(matricula, plaza_abonado, pin, plazas, ocupaciones):
+
+    flag = False
+
+    for ocupacion in ocupaciones:
+        if ocupacion.plaza.id == plaza_abonado.id\
+                and not plaza_abonado.libre\
+                and plaza_abonado.pin == pin\
+                and ocupacion.vehiculo.matricula == matricula:
+            o = ocupacion
+            flag = True
+
+    plaza_abonado.libre = True
+
+    with open("recursos/pickle/plazas.pckl", "wb") as fw:
+        pickle.dump(plazas, fw)
+
+    return plazas
+
+
+
+
+
 
 
 

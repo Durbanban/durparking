@@ -51,14 +51,20 @@ class ParkingService:
             cliente.abono = abono
             abono.abonado = cliente
 
-        plazas[5].abonado = clientes_abonados[0]
-        plazas[5].generar_pin()
-        plazas[15].abonado = clientes_abonados[1]
-        plazas[15].generar_pin()
-        plazas[25].abonado = clientes_abonados[2]
-        plazas[25].generar_pin()
-        plazas[35].abonado = clientes_abonados[3]
-        plazas[35].generar_pin()
+        plazas[30].abonado = clientes_abonados[0]
+        plazas[30].generar_pin()
+        plazas[30].libre = False
+
+        plazas[31].abonado = clientes_abonados[1]
+        plazas[31].generar_pin()
+
+        plazas[37].abonado = clientes_abonados[2]
+        plazas[37].generar_pin()
+
+        plazas[36].abonado = clientes_abonados[3]
+        plazas[36].generar_pin()
+        plazas[36].libre = False
+
 
         for cliente, vehiculo in zip(clientes, vehiculos):
             cliente.vehiculo = vehiculo

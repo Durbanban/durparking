@@ -5,6 +5,13 @@ from model.abono import Abono
 from model.vehiculo import Vehiculo
 from model.cliente_abonado import ClienteAbonado
 
+from dateutil.relativedelta import relativedelta
+from datetime import date, datetime, timedelta
+from locale import setlocale, LC_ALL
+
+setlocale(LC_ALL, 'es-ES')
+
+
 def mostrar_estado(plazas):
     filas = []
 
@@ -69,6 +76,58 @@ def comprobar_abonado(dni, clientes):
                     resultado = cliente
                     flag = True
     return flag, resultado
+
+
+def obtener_facturacion(inicio, fin, cobros):
+
+    cobros_objetivo = []
+    resultado = 0
+
+    for cobro in cobros:
+        if inicio < cobro.fecha < fin:
+            cobros_objetivo.append(cobro)
+            resultado += cobro.cantidad
+
+    return cobros_objetivo, round(resultado, 2)
+
+def obtener_abonos(abonos):
+
+    resultado = 0
+
+    for abono in abonos:
+        resultado += abono.tarifa
+
+    return round(resultado, 2)
+
+def alta_abonado(abonado):
+    pass
+
+def modificacion_abonado:
+    pass
+
+def baja_abonado():
+    pass
+
+def caducidad_abonos_mes():
+    pass
+
+def caducidad_abonos_10_dias(abonos):
+    resultados = []
+    for abono in abonos:
+        if date.today() - timedelta(days=10) < abono.fecha_cancelacion < date.today():
+            resultados.append(abono)
+
+    return resultados
+
+
+
+
+
+
+
+
+
+
 
 
 
