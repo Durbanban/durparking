@@ -1,5 +1,5 @@
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from locale import setlocale, LC_ALL
 import pickle
 from io import open
@@ -53,10 +53,9 @@ target = threading.Thread(target=temporizador)
 target.start()
 
 setlocale(LC_ALL, 'es-ES')
-
-
 mostrar_menu_login()
 opcion_login = int(input())
+
 
 while opcion_login != 0:
     if opcion_login == 1: # ZONA CLIENTE
@@ -72,6 +71,7 @@ while opcion_login != 0:
                       f"{libres_moto} plazas libres para motocicletas, "
                       f"y {libres_movilidad} plazas libres para movilidad reducida")
                 matricula_deposito = input("Introduzca la matrícula de su vehículo: ")
+
                 flag = False
                 flag_2 = False
                 while not flag and not flag_2:
@@ -103,27 +103,27 @@ while opcion_login != 0:
             elif opcion_cliente == 2: # RETIRAR VEHÍCULO
                 cobro = None
                 matricula = input("Introduzca la matrícula de su vehículo: ")
-                flag = False
-                for vehiculo in vehiculos:
-                    if vehiculo.matricula == matricula and not flag:
-                        vehiculo_cliente = vehiculo
-                        flag = True
-                if flag:
+                check = list(filter(lambda vehiculo: vehiculo.matricula == matricula, vehiculos))
+                if len(check) > 0:
                     identificador = int(input("Introduzca el id de la plaza donde está estacionado su vehículo: "))
                     if 1 <= identificador <= 40:
-                        plaza = plazas[identificador -1]
-                        pin = input("Introduzca el pin asociado a dicha plaza: ")
-                        if plaza.pin == pin:
-                            if not plaza.libre:
-                                cobro = retirar_vehiculo(matricula, plaza, pin, cobros, ocupaciones)
-                                if cobro is not None:
-                                    print(f"El importe es: {cobro.cantidad} €")
-                                else:
-                                    print("No se ha podido retirar el vehículo")
-                            elif plaza.libre:
-                                print("El vehículo no está estacionado en la plaza")
+                        plaza_cliente = plazas[identificador -1]
+                        check = list(filter(lambda plaza: plaza_cliente.abonado is not None, plazas))
+                        if len(check) == 0:
+                            pin = input("Introduzca el pin asociado a dicha plaza: ")
+                            if plaza_cliente.pin == pin:
+                                if not plaza_cliente.libre:
+                                    cobro = retirar_vehiculo(matricula, plaza_cliente, pin, cobros, ocupaciones)
+                                    if cobro is not None:
+                                        print(f"El importe es: {cobro.cantidad} €")
+                                    else:
+                                        print("No se ha podido retirar el vehículo")
+                                elif plaza.libre:
+                                    print("El vehículo no está estacionado en la plaza")
+                            else:
+                                print("PIN incorrecto. Inténtelo de nuevo")
                         else:
-                            print("PIN incorrecto. Inténtelo de nuevo")
+                            print("Esa plaza pertenece a un cliente abonado")
                     else:
                         print("Lo sentimos, la plaza no existe")
                 else:
@@ -135,22 +135,16 @@ while opcion_login != 0:
                 if auth:
                     print(f"¡Bienvenido {abonado.nombre}!")
                     matricula = input("Introduzca la matrícula del vehículo: ")
-                    flag = False
-                    for vehiculo in vehiculos:
-                        if vehiculo.matricula == matricula and not flag:
-                            vehiculo_abonado = vehiculo
-                            flag = True
-                    flag_2 = False
-                    for plaza in plazas:
-                        if plaza.abonado is not None:
-                            if plaza.abonado.id == abonado.id and plaza.libre:
-                                flag_2 = True
-                    if flag and flag_2:
+                    check_vehiculos = list(filter(lambda vehiculo: vehiculo.matricula == matricula, vehiculos))
+                    check_plazas = list(filter(lambda plaza: plaza.abonado is not None
+                                                             and plaza.abonado.id == abonado.id
+                                                             and plaza.libre, plazas))
+
+                    if len(check_vehiculos) > 0 and len(check_plazas) > 0:
                         ticket_abonado = depositar_vehiculo_abonado(abonado, plazas, ocupaciones)
-                        print(ticket_abonado)
-                    elif not flag:
+                    elif len(check_vehiculos) == 0:
                         print("Lo sentimos, esa matrícula no existe")
-                    elif not flag_2:
+                    elif len(check_plazas) == 0:
                         print(f"{abonado.nombre}, su plaza ya está ocupada")
                 else:
                     print("Lo sentimos, no es usted abonado")
@@ -229,56 +223,70 @@ while opcion_login != 0:
 
             elif opcion_admin == 4: # DAR DE ALTA UN ABONO
                 matricula = input("Introduzca la matrícula del vehículo del abonado: ")
-                print("Introduzca el tipo del vehículo: ")
-                print("1 para turismo")
-                print("2 para motocicleta")
-                print("3 para movilidad reducida")
-                opcion_tipo = int(input())
-                while opcion_tipo not in [1, 2, 3]:
-                    print("Por favor introduzca un número válido")
+                lista = list(filter(lambda cliente: isinstance(cliente, ClienteAbonado)
+                                                    and cliente.vehiculo.matricula == matricula, clientes))
+                if len(lista) == 0:
+                    print("Introduzca el tipo del vehículo: ")
+                    print("1 para turismo")
+                    print("2 para motocicleta")
+                    print("3 para movilidad reducida")
                     opcion_tipo = int(input())
-                if opcion_tipo == 1:
-                    tipo_vehiculo = "turismo"
-                elif opcion_tipo == 2:
-                    tipo_vehiculo = "moto"
-                elif opcion_tipo == 3:
-                    tipo_vehiculo = "movilidad"
-                dni = input("Introduzca el dni del abonado: ")
-                nombre = input("Introduzca el nombre del abonado: ")
-                tarjeta = input("Introduzca el número de tarjeta del abonado")
-                email = input("Introduzca el email del abonado: ")
-                zona_admin.mostrar_estado(plazas)
-                id_plaza = int(input("Introduzca el identificador de la plaza asignada: "))
-                flag = False
-                while not flag:
-                    for plaza in plazas:
-                        if plaza.id == id_plaza:
-                            if plaza.tipo == tipo_vehiculo and plaza.libre and plaza.abonado is None and not flag:
-                                plaza_abonado = plaza
-                                flag = True
-                    if not flag:
-                        zona_admin.mostrar_estado(plazas)
-                        print("La plaza con ese identificador no está disponible o no es de su tipo de vehículo")
-                        id_plaza = int(input("Introduzca el identificador de la plaza asignada: "))
+                    while opcion_tipo not in [1, 2, 3]:
+                        print("Por favor introduzca un número válido")
+                        opcion_tipo = int(input())
+                    if opcion_tipo == 1:
+                        tipo_vehiculo = "turismo"
+                    elif opcion_tipo == 2:
+                        tipo_vehiculo = "moto"
+                    elif opcion_tipo == 3:
+                        tipo_vehiculo = "movilidad"
+                    dni = input("Introduzca el dni del abonado: ")
+                    lista = list(filter(lambda cliente: isinstance(cliente, ClienteAbonado) and cliente.dni == dni, clientes))
+                    if len(lista) == 0:
 
-                print("Introduzca el tipo de abono del abonado: ")
-                print("1 para el abono mensual (25 €)")
-                print("2 para el abono trimestral (70 €)")
-                print("3 para el abono semestral (130 €)")
-                print("4 para el abono anual (200 €)")
-                print("0 para abandonar el proceso (¡¡¡tieso alert!!!)")
-                opcion_abono = int(input())
-                while opcion_abono not in [1, 2, 3, 4, 0]:
-                    print("Por favor, introduzca un número válido")
-                    opcion_abono = int(input())
-                if opcion_abono != 0:
-                    abonado, plaza_asignada = zona_admin.alta_abonado(matricula, tipo_vehiculo, dni,
-                                                                nombre, tarjeta, email, opcion_abono,
-                                                                plaza_abonado, vehiculos, clientes, abonos, cobros)
-                    print(f"Asegúrese de que {abonado.nombre} conoce las normas del parking y"
-                          f" que el pin de la plaza es: {plaza_asignada.pin}")
+                        nombre = input("Introduzca el nombre del abonado: ")
+                        tarjeta = input("Introduzca el número de tarjeta del abonado")
+                        email = input("Introduzca el email del abonado: ")
+                        zona_admin.mostrar_estado(plazas)
+                        id_plaza = int(input("Introduzca el identificador de la plaza asignada: "))
+                        flag = False
+                        while not flag:
+                            for plaza in plazas:
+                                if plaza.id == id_plaza:
+                                    if plaza.tipo == tipo_vehiculo and plaza.libre and plaza.abonado is None and not flag:
+                                        plaza_abonado = plaza
+                                        flag = True
+                            if not flag:
+                                zona_admin.mostrar_estado(plazas)
+                                print("La plaza con ese identificador no está disponible o no es de su tipo de vehículo")
+                                id_plaza = int(input("Introduzca el identificador de la plaza asignada: "))
+
+                        print("Introduzca el tipo de abono del abonado: ")
+                        print("1 para el abono mensual (25 €)")
+                        print("2 para el abono trimestral (70 €)")
+                        print("3 para el abono semestral (130 €)")
+                        print("4 para el abono anual (200 €)")
+                        print("0 para abandonar el proceso (¡¡¡tieso alert!!!)")
+                        opcion_abono = int(input())
+                        while opcion_abono not in [1, 2, 3, 4, 0]:
+                            print("Por favor, introduzca un número válido")
+                            opcion_abono = int(input())
+                        if opcion_abono != 0:
+                            abonado, plaza_asignada, checker = zona_admin.alta_abonado(matricula, tipo_vehiculo, dni,
+                                                                        nombre, tarjeta, email, opcion_abono,
+                                                                        plaza_abonado, vehiculos, clientes, abonos, cobros)
+                            if checker:
+                                print(f"Asegúrese de que {abonado.nombre} conoce las normas del parking y"
+                                      f" que el pin de la plaza es: {plaza_asignada.pin}")
+                            else:
+                                print("El tipo de vehículo no coincide con el vehículo del cliente")
+                        else:
+                            print("Abortando alta de abonado...")
+                    else:
+                        print("Ya existe un abonado con ese dni")
+
                 else:
-                    print("Abortando alta de abonado...")
+                    print("Ya existe un vehículo asociado a un abonado con ese dni")
             elif opcion_admin == 5: # RENOVAR ABONO
                 dni_abonado = input("Introduzca el dni del abonado a renovar: ")
                 flag = False

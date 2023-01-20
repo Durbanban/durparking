@@ -50,6 +50,9 @@ class ClienteAbonado(Cliente):
     def abono(self, nuevo_abono):
         self.__abono = nuevo_abono
 
+    def generar_abono(self, abono):
+        self.__abono = abono
+
     def __str__(self):
         return f"Id: {self.id}\n" \
                f"Tipo de vehículo: {self.vehiculo.tipo}\n" \

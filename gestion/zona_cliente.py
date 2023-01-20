@@ -19,32 +19,26 @@ def depositar_vehiculo(matricula, opcion_tipo, plazas, clientes, ocupaciones, ve
         elif opcion_tipo == 3:
             tipo = "movilidad"
 
-    vehiculo_encontrado = False
-    for vehiculo in vehiculos:
-        if vehiculo.matricula == matricula and not vehiculo_encontrado:
-            vehiculo_cliente = vehiculo
-            vehiculo_encontrado = True
-
-    if not vehiculo_encontrado:
-
+    check_vehiculos = list(filter(lambda vehiculo: vehiculo.matricula == matricula, vehiculos))
+    if len(check_vehiculos) > 0:
+        vehiculo_cliente = check_vehiculos[0]
+    elif len(check_vehiculos) == 0:
         vehiculo_cliente = Vehiculo(matricula, tipo)
         cliente = Cliente(len(clientes) + 1, vehiculo_cliente)
         vehiculo_cliente.owner = cliente
 
-    flag = False
+    check_plazas = list(filter(lambda plaza: plaza.tipo == vehiculo_cliente.tipo
+                                             and plaza.libre
+                                             and plaza.abonado is None, plazas))
 
-    for plaza in plazas:
-        if plaza.tipo == vehiculo_cliente.tipo and plaza.pin == '' and not flag:
-            plaza.generar_pin()
-            ocupacion = Ocupacion(datetime.now(), plaza, vehiculo_cliente)
-            ocupaciones.append(ocupacion)
-            plaza.libre = False
-            flag = True
+    if len(check_plazas) > 0 and len(check_vehiculos) == 0:
 
-    if flag and not vehiculo_encontrado:
-
+        ocupacion = Ocupacion(datetime.now(), check_plazas[0], vehiculo_cliente)
+        check_plazas[0].libre = False
+        check_plazas[0].generar_pin()
         clientes.append(cliente)
         vehiculos.append(vehiculo_cliente)
+        ocupaciones.append(ocupacion)
 
         with open("recursos/pickle/clientes.pckl", "wb") as fw:
             pickle.dump(clientes, fw)
@@ -55,9 +49,14 @@ def depositar_vehiculo(matricula, opcion_tipo, plazas, clientes, ocupaciones, ve
         with open("recursos/pickle/ocupaciones.pckl", "wb") as fw:
             pickle.dump(ocupaciones, fw)
 
-
         return ocupacion
-    elif flag and vehiculo_encontrado:
+
+    elif len(check_plazas) > 0 and len(check_vehiculos) > 0:
+
+        ocupacion = Ocupacion(datetime.now(), check_plazas[0], vehiculo_cliente)
+        check_plazas[0].libre = False
+        check_plazas[0].generar_pin()
+        ocupaciones.append(ocupacion)
 
         with open("recursos/pickle/ocupaciones.pckl", "wb") as fw:
             pickle.dump(ocupaciones, fw)
@@ -67,17 +66,12 @@ def depositar_vehiculo(matricula, opcion_tipo, plazas, clientes, ocupaciones, ve
 
 def retirar_vehiculo(matricula, plaza_cliente, pin, cobros, ocupaciones):
 
-    flag = False
+    check = list(filter(lambda ocupacion: ocupacion.plaza.id == plaza_cliente.id
+                                          and not plaza_cliente.libre
+                                          and ocupacion.vehiculo.matricula == matricula, ocupaciones))
 
-    for ocupacion in ocupaciones:
-        if ocupacion.plaza.id == plaza_cliente.id\
-                and not plaza_cliente.libre\
-                and ocupacion.vehiculo.matricula == matricula\
-                and not flag:
-            o = ocupacion
-            flag = True
-    if flag:
-        intervalo = datetime.now() - o.fecha_deposito
+    if len(check) > 0:
+        intervalo = datetime.now() - check[0].fecha_deposito
         importe = round(plaza_cliente.tarifa * (intervalo.total_seconds() / 60), 2)
         cobro = Cobro(importe, datetime.now())
         cobros.append(cobro)

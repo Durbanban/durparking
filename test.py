@@ -2,8 +2,11 @@ import calendar
 from model.parking import Parking
 from model.plaza_parking import PlazaParking
 from model.cliente import Cliente
+from model.cliente_abonado import ClienteAbonado
 from model.vehiculo import Vehiculo
-from datetime import datetime, timedelta
+from model.abono import Abono
+from datetime import datetime, timedelta, date
+from dateutil import relativedelta
 from locale import setlocale, LC_ALL
 import pickle
 from io import open
@@ -29,6 +32,7 @@ with open("recursos/pickle/cobros.pckl", "rb") as fr:
 
 with open("recursos/pickle/ocupaciones.pckl", "rb") as fr:
     ocupaciones = pickle.load(fr)
+
 
 for item in plazas:
     print(item)

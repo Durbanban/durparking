@@ -1,8 +1,5 @@
-from model.parking import Parking
-from model.plaza_parking import PlazaParking
 from model.cliente_abonado import ClienteAbonado
 from model.cobro_abonado import CobroAbonado
-from datetime import datetime, timedelta
 from repositorios.parking_repository import cargar_plazas, \
     cargar_vehiculos,\
     cargar_clientes,\
@@ -59,20 +56,6 @@ class ParkingService:
 
         for abonado, cobro in zip(clientes_abonados, cobros_abonados):
             cobro.abonado = abonado
-
-
-        # cobro_1 = CobroAbonado(25.0, datetime.now() - timedelta(days=24))
-        # cobro_1.abonado = clientes_abonados[0]
-        # cobros.append(cobro_1)
-        # cobro_2 = CobroAbonado(70.0, datetime.now())
-        # cobro_2.abonado = clientes_abonados[1]
-        # cobros.append(cobro_2)
-        # cobro_3 = CobroAbonado(130.0, datetime.now())
-        # cobro_3.abonado = clientes_abonados[2]
-        # cobros.append(cobro_3)
-        # cobro_4 = CobroAbonado(200.0, datetime.now())
-        # cobro_4.abonado = clientes_abonados[3]
-        # cobros.append(cobro_4)
 
 
 

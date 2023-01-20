@@ -161,13 +161,8 @@ def obtener_abonos(abonos, cobros):
 def alta_abonado(matricula, tipo_vehiculo, dni, nombre, tarjeta, email,
                  opcion_abono, plaza, vehiculos, clientes, abonos, cobros):
 
-    vehiculo = Vehiculo(matricula, tipo_vehiculo)
-    abonado = ClienteAbonado(len(clientes) + 1, vehiculo)
-    vehiculo.owner = abonado
-    abonado.dni = dni
-    abonado.nombre = nombre
-    abonado.tarjeta = tarjeta
-    abonado.email = email
+    flag = False
+
     if opcion_abono == 1:
         tipo_abono = "mensual"
         tarifa_abono = 25.0
@@ -189,36 +184,77 @@ def alta_abonado(matricula, tipo_vehiculo, dni, nombre, tarjeta, email,
         fecha_activacion = date.today()
         fecha_cancelacion = date.today() + relativedelta(months=12)
 
-    abono = Abono(tipo_abono, tarifa_abono, fecha_activacion, fecha_cancelacion, abonado)
-
-    abonado.abono = abono
-
-    plaza.abonado = abonado
-
-    plaza.generar_pin()
+    abono = Abono(tipo_abono, tarifa_abono, fecha_activacion, fecha_cancelacion)
 
     cobro = CobroAbonado(abono.tarifa, datetime.now())
-    cobro.abonado = abonado
 
-    clientes.append(abonado)
-    vehiculos.append(vehiculo)
-    abonos.append(abono)
-    cobros.append(cobro)
+    check = list(filter(lambda vehiculo: vehiculo.matricula == matricula, vehiculos))
+    if len(check) == 0:
+        flag = True
+        vehiculo = Vehiculo(matricula, tipo_vehiculo)
+        abonado = ClienteAbonado(len(clientes) + 1, vehiculo)
+        vehiculo.owner = abonado
+        abonado.dni = dni
+        abonado.nombre = nombre
+        abonado.tarjeta = tarjeta
+        abonado.email = email
+        abonado.abono = abono
+        abono.abonado = abonado
+        plaza.abonado = abonado
+        cobro.abonado = abonado
+        clientes.append(abonado)
+        vehiculos.append(vehiculo)
+        plaza.generar_pin()
+        abonos.append(abono)
+        cobros.append(cobro)
+    else:
+        vehiculo = check[0]
+        if vehiculo.tipo == tipo_vehiculo:
+            flag = True
+            cliente = vehiculo.owner
+            cliente.__class__ = ClienteAbonado
+            cliente.dni = dni
+            cliente.nombre = nombre
+            cliente.tarjeta = tarjeta
+            cliente.email = email
+            cliente.abono = abono
+            abono.abonado = cliente
+            plaza.abonado = cliente
+            cobro.abonado = cliente
+            plaza.generar_pin()
+            abonos.append(abono)
+            cobros.append(cobro)
 
+    if len(check) == 0:
+        with open("recursos/pickle/clientes.pckl", "wb") as fw:
+            pickle.dump(clientes, fw)
 
-    with open("recursos/pickle/clientes.pckl", "wb") as fw:
-        pickle.dump(clientes, fw)
+        with open("recursos/pickle/vehiculos.pckl", "wb") as fw:
+            pickle.dump(vehiculos, fw)
 
-    with open("recursos/pickle/vehiculos.pckl", "wb") as fw:
-        pickle.dump(vehiculos, fw)
+        with open("recursos/pickle/abonos.pckl", "wb") as fw:
+            pickle.dump(abonos, fw)
 
-    with open("recursos/pickle/abonos.pckl", "wb") as fw:
-        pickle.dump(abonos, fw)
+        with open("recursos/pickle/cobros.pckl", "wb") as fw:
+            pickle.dump(cobros, fw)
+        return abonado, plaza, flag
+    else:
+        if vehiculo.tipo == tipo_vehiculo:
+            with open("recursos/pickle/clientes.pckl", "wb") as fw:
+                pickle.dump(clientes, fw)
 
-    with open("recursos/pickle/cobros.pckl", "wb") as fw:
-        pickle.dump(cobros, fw)
+            with open("recursos/pickle/vehiculos.pckl", "wb") as fw:
+                pickle.dump(vehiculos, fw)
 
-    return abonado, plaza
+            with open("recursos/pickle/abonos.pckl", "wb") as fw:
+                pickle.dump(abonos, fw)
+
+            with open("recursos/pickle/cobros.pckl", "wb") as fw:
+                pickle.dump(cobros, fw)
+            return cliente, plaza, flag
+        else:
+            v = Vehiculo("matricula", "moto")
+            return Cliente(1, v), plaza, flag
 
 
 def modificar_abonado(nombre, tarjeta, email, abonado):
