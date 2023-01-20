@@ -22,8 +22,8 @@ main_thread = threading.current_thread()
 
 
 def temporizador():
-    flag = True
-    while flag:
+    flag = False
+    while not flag:
 
         sec = 1
         while sec < 300:
@@ -33,7 +33,7 @@ def temporizador():
 
             else:
                 sec = 999
-                flag = False
+                flag = True
 
         with open("recursos/pickle/plazas.pckl", "wb") as fw:
             pickle.dump(plazas, fw)
@@ -72,24 +72,36 @@ while opcion_login != 0:
                       f"{libres_moto} plazas libres para motocicletas, "
                       f"y {libres_movilidad} plazas libres para movilidad reducida")
                 matricula_deposito = input("Introduzca la matrícula de su vehículo: ")
-                print("Introduzca el tipo del vehículo: ")
-                print("1 para turismo")
-                print("2 para motocicleta")
-                print("3 para movilidad reducida")
-                opcion_tipo = int(input())
-                while opcion_tipo not in [1, 2, 3]:
-                    print("Por favor, introduzca un número válido")
+                flag = False
+                flag_2 = False
+                while not flag and not flag_2:
+                    for ocupacion in ocupaciones:
+                        if not ocupacion.plaza.libre and ocupacion.vehiculo.matricula == matricula_deposito and not flag:
+                            o = ocupacion
+                            flag = True
+                    flag_2 = True
+                if not flag:
+                    print("Introduzca el tipo del vehículo: ")
+                    print("1 para turismo")
+                    print("2 para motocicleta")
+                    print("3 para movilidad reducida")
                     opcion_tipo = int(input())
+                    while opcion_tipo not in [1, 2, 3]:
+                        print("Por favor, introduzca un número válido")
+                        opcion_tipo = int(input())
 
-                ticket = depositar_vehiculo(matricula_deposito, opcion_tipo,
-                                                    plazas, clientes, ocupaciones, vehiculos)
-                if ticket is not None:
-                    print(ticket)
+                    ticket = depositar_vehiculo(matricula_deposito, opcion_tipo,
+                                                        plazas, clientes, ocupaciones, vehiculos)
+                    if ticket is not None:
+                        print(ticket)
+                    else:
+                        print("Lo sentimos, no existen plazas libres para su tipo de vehículo ahora mismo")
                 else:
-                    print("Lo sentimos, no existen plazas libres para su tipo de vehículo ahora mismo")
+                    print(f"El vehículo con matrícula: {matricula_deposito} está en la plaza: {o.plaza.id}")
 
 
             elif opcion_cliente == 2: # RETIRAR VEHÍCULO
+                cobro = None
                 matricula = input("Introduzca la matrícula de su vehículo: ")
                 flag = False
                 for vehiculo in vehiculos:
@@ -97,14 +109,17 @@ while opcion_login != 0:
                         vehiculo_cliente = vehiculo
                         flag = True
                 if flag:
-                    identificador = int(input("Introduzca el identificador de la plaza donde está estacionado su vehículo: "))
+                    identificador = int(input("Introduzca el id de la plaza donde está estacionado su vehículo: "))
                     if 1 <= identificador <= 40:
                         plaza = plazas[identificador -1]
                         pin = input("Introduzca el pin asociado a dicha plaza: ")
                         if plaza.pin == pin:
                             if not plaza.libre:
-                                cobro = retirar_vehiculo(matricula, plaza, pin, plazas, cobros, ocupaciones)
-                                print(f"El importe es: {cobro.cantidad} €")
+                                cobro = retirar_vehiculo(matricula, plaza, pin, cobros, ocupaciones)
+                                if cobro is not None:
+                                    print(f"El importe es: {cobro.cantidad} €")
+                                else:
+                                    print("No se ha podido retirar el vehículo")
                             elif plaza.libre:
                                 print("El vehículo no está estacionado en la plaza")
                         else:
@@ -148,7 +163,7 @@ while opcion_login != 0:
                         vehiculo_abonado = vehiculo
                         flag = True
                 if flag:
-                    identificador = int(input("Introduzca el identificador de la plaza donde está estacionado su vehículo"))
+                    identificador = int(input("Introduzca el id de la plaza donde está estacionado su vehículo"))
                     if 1 <= identificador <= 40:
                         plaza = plazas[identificador -1]
                         pin = input("Introduzca el pin asociado a dicha plaza: ")

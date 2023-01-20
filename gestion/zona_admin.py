@@ -19,26 +19,67 @@ def mostrar_estado(plazas):
     filas = []
 
     for plaza in plazas:
+        tipo = plaza.tipo[:3].upper()
         if plaza.abonado is None and plaza.libre:
             if plaza.id <= 9:
-                filas.append(f"  *******  \n  *  {plaza.id}  *  \n  *  L  *  \n  *     *  \n  *******  ")
+                filas.append(f"  *******  \n"
+                             f"  *  {plaza.id}  *  \n"
+                             f"  *  L  *  \n"
+                             f"  *     *  \n"
+                             f"  * {tipo} *  \n"
+                             f"  *******  ")
             else:
-                filas.append(f"  *******  \n  *  {plaza.id} *  \n  *  L  *  \n  *     *  \n  *******  ")
+                filas.append(f"  *******  \n"
+                             f"  *  {plaza.id} *  \n"
+                             f"  *  L  *  \n"
+                             f"  *     *  \n"
+                             f"  * {tipo} *  \n"
+                             f"  *******  ")
         elif plaza.abonado is None and not plaza.libre:
             if plaza.id <= 9:
-                filas.append(f"  *******  \n  *  {plaza.id}  *  \n  *  O  *  \n  *     *  \n  *******  ")
+                filas.append(f"  *******  \n"
+                             f"  *  {plaza.id}  *  \n"
+                             f"  *  O  *  \n"
+                             f"  *     *  \n"
+                             f"  * {tipo} *  \n"
+                             f"  *******  ")
             else:
-                filas.append(f"  *******  \n  *  {plaza.id} *  \n  *  O  *  \n  *     *  \n  *******  ")
+                filas.append(f"  *******  \n"
+                             f"  *  {plaza.id} *  \n"
+                             f"  *  O  *  \n"
+                             f"  *     *  \n"
+                             f"  * {tipo} *  \n"
+                             f"  *******  ")
         elif plaza.abonado is not None and plaza.libre:
             if plaza.id <= 9:
-                filas.append(f"  *******  \n  *  {plaza.id}  *  \n  *  L  *  \n  *  A  *  \n  *******  ")
+                filas.append(f"  *******  \n"
+                             f"  *  {plaza.id}  *  \n"
+                             f"  *  L  *  \n"
+                             f"  *  A  *  \n"
+                             f"  * {tipo} *  \n"
+                             f"  *******  ")
             else:
-                filas.append(f"  *******  \n  *  {plaza.id} *  \n  *  L  *  \n  *  A  *  \n  *******  ")
+                filas.append(f"  *******  \n"
+                             f"  *  {plaza.id} *  \n"
+                             f"  *  L  *  \n"
+                             f"  *  A  *  \n"
+                             f"  * {tipo} *  \n"
+                             f"  *******  ")
         elif plaza.abonado is not None and not plaza.libre:
             if plaza.id <= 9:
-                filas.append(f"  *******  \n  *  {plaza.id}  *  \n  *  O  *  \n  *  A  *  \n  *******  ")
+                filas.append(f"  *******  \n"
+                             f"  *  {plaza.id}  *  \n"
+                             f"  *  O  *  \n"
+                             f"  *  A  *  \n"
+                             f"  * {tipo} *  \n"
+                             f"  *******  ")
             else:
-                filas.append(f"  *******  \n  *  {plaza.id} *  \n  *  O  *  \n  *  A  *  \n  *******  ")
+                filas.append(f"  *******  \n"
+                             f"  *  {plaza.id} *  \n"
+                             f"  *  O  *  \n"
+                             f"  *  A  *  \n"
+                             f"  * {tipo} *  \n"
+                             f"  *******  ")
 
     primera_fila = filas[:10]
     segunda_fila = filas[10:20]
@@ -55,7 +96,8 @@ def mostrar_estado(plazas):
         print(*(line.ljust(5) for line in lines))
 
     print()
-    print("Leyenda: L = Libre, O = Ocupada, A = Plaza de abonado")
+    print("Leyenda: L = Libre, O = Ocupada, A = Plaza de abonado,\n"
+          "\t\t TUR = Turismo, MOT = Motocicleta, MOV = Movilidad reducida")
     print()
 
 
